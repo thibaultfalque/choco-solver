@@ -223,6 +223,7 @@ public abstract class AbstractCriterionBasedVariableSelector<V extends Variable>
             elt.ws[2] += remapInc();
             double[] ws = refinedWeights.compute(prop, remapWeights);
             increase(prop, elt, ws);
+            prop.updateWeight(ws[0]);
         }
     }
 

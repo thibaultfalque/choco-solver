@@ -89,6 +89,19 @@ public class Constraint {
      * If a constraint is enabled to the propagation engine.
      */
     private boolean enabled = true;
+    
+    public static int currentGroup = 0;
+    public static int currentBlock = 0;
+    public static boolean inGroup = false;
+    public static boolean inBlock = false;
+    private int groupId;
+    private int blockId;
+    
+    private boolean ignorable = true;
+
+	private int nEffectiveBacktracking;
+
+	private int nEffectiveFiltering;
 
     //***********************************************************************************
     // CONSTRUCTOR
@@ -108,6 +121,8 @@ public class Constraint {
         this.propagators = propagators;
         this.mStatus = Status.FREE;
         this.cidx = -1;
+        this.groupId = inGroup ? currentGroup : -1 ;
+        this.blockId = inBlock ? currentBlock : -1;
         for (Propagator<?> propagator : propagators) {
             propagator.defineIn(this);
         }
@@ -513,4 +528,38 @@ public class Constraint {
             }
         }
     }
+    
+    public void setIgnorable(boolean ignorable) {
+		this.ignorable = ignorable;
+	}
+    
+    public boolean isIgnorable() {
+		return ignorable;
+	}
+    
+    public int getGroupId() {
+		return groupId;
+	}
+    
+    public int getBlockId() {
+		return blockId;
+	}
+
+	public void incEffectiveBacktracking() {
+		nEffectiveBacktracking++;
+		propagators[0].model.getSolver().getSearchMonitors().whenBacktrackingChange(this, nEffectiveBacktracking -1, nEffectiveBacktracking);
+	}
+	
+	public int getnEffectiveBacktracking() {
+		return nEffectiveBacktracking;
+	}
+
+	public void incEffectiveFiltering() {
+		propagators[0].model.getSolver().getSearchMonitors().whenEffectiveFilteringChange(this, nEffectiveFiltering -1, nEffectiveFiltering);
+		nEffectiveFiltering++;
+	}
+	
+	public int getnEffectiveFiltering() {
+		return nEffectiveFiltering;
+	}
 }

@@ -243,10 +243,10 @@
                     <executions>
                         <execution>
                             <id>default-compile</id>
-                            <configuration>
-                                <!-- compile everything to ensure module-info contains right entries -->
-                                <release>9</release>
-                            </configuration>
+<!--                            <configuration>
+                                 compile everything to ensure module-info contains right entries 
+                                <release>21</release>
+                            </configuration>-->
                         </execution>
                         <execution>
                             <id>base-compile</id>
@@ -266,48 +266,9 @@
                         <encoding>UTF-8</encoding>
                         <showDeprecation>true</showDeprecation>
                         <showWarnings>true</showWarnings>
-                        <!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't configured the maven-toolchains-plugin -->
-                        <jdkToolchain>
-                            <version>9</version>
-                        </jdkToolchain>
-                        <release>8</release>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <!-- see http://www.mojohaus.org/extra-enforcer-rules/enforceBytecodeVersion.html -->
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-enforcer-plugin</artifactId>
-                    <version>3.1.0
-                    </version> <!-- find the latest version at http://maven.apache.org/plugins/maven-enforcer-plugin/ -->
-                    <executions>
-                        <execution>
-                            <id>enforce-bytecode-version</id>
-                            <goals>
-                                <goal>enforce</goal>
-                            </goals>
-                            <configuration>
-                                <rules>
-                                    <enforceBytecodeVersion>
-                                        <maxJdkVersion>1.8</maxJdkVersion>
-                                    </enforceBytecodeVersion>
-                                </rules>
-                                <fail>true</fail>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.codehaus.mojo</groupId>
-                            <artifactId>extra-enforcer-rules</artifactId>
-                            <version>1.6.1</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>org.apache.maven.shared</groupId>
-                            <artifactId>maven-dependency-tree</artifactId>
-                            <version>3.2.1</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
+                
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>

@@ -9,6 +9,7 @@
  */
 package org.chocosolver.solver.search.loop.monitors;
 
+import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.exception.ContradictionException;
 
 import java.util.ArrayList;
@@ -22,7 +23,9 @@ import java.util.List;
  */
 public final class SearchMonitorList implements IMonitorClose, IMonitorContradiction, IMonitorDownBranch,
         IMonitorInitialize, IMonitorOpenNode, IMonitorRestart,
-        IMonitorSolution, IMonitorUpBranch {
+        IMonitorSolution, IMonitorUpBranch, IMonitorApprox {
+	
+	private final List<IMonitorApprox> mapprox = new ArrayList<>();
 
     /**
      * Close monitors
@@ -193,6 +196,9 @@ public final class SearchMonitorList implements IMonitorClose, IMonitorContradic
             if (sm instanceof IMonitorUpBranch) {
                 mubra.add((IMonitorUpBranch) sm);
             }
+            if (sm instanceof IMonitorApprox) {
+                mapprox.add((IMonitorApprox) sm);
+            }
         }
     }
 
@@ -228,6 +234,9 @@ public final class SearchMonitorList implements IMonitorClose, IMonitorContradic
             if (sm instanceof IMonitorUpBranch) {
                 isPluggedIn = mubra.contains(sm);
             }
+            if (sm instanceof IMonitorApprox) {
+                isPluggedIn = mapprox.contains(sm);
+            }
         }
         return isPluggedIn;
     }
@@ -262,6 +271,9 @@ public final class SearchMonitorList implements IMonitorClose, IMonitorContradic
             if (sm instanceof IMonitorUpBranch) {
                 mubra.remove(sm);
             }
+            if (sm instanceof IMonitorApprox) {
+                mapprox.remove(sm);
+            }
         }
     }
 
@@ -278,5 +290,20 @@ public final class SearchMonitorList implements IMonitorClose, IMonitorContradic
         msolu.clear();
         mubra.clear();
     }
+
+	@Override
+	public void whenEffectiveFilteringChange(Constraint c, int oldValue, int newValue) {
+		mapprox.forEach(m -> m.whenEffectiveFilteringChange(c, oldValue, newValue));
+	}
+
+	@Override
+	public void whenWDEGWeightChange(Constraint c, double oldValue, double newValue) {
+		mapprox.forEach(m -> m.whenWDEGWeightChange(c, oldValue, newValue));
+	}
+
+	@Override
+	public void whenBacktrackingChange(Constraint c, int oldValue, int newValue) {
+		mapprox.forEach(m -> m.whenBacktrackingChange(c, oldValue, newValue));
+	}
 
 }

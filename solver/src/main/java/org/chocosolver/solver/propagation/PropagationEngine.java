@@ -318,6 +318,10 @@ public class PropagationEngine {
             }
             assert found : variable + " not in scope of " + cause;
         }
+        if(Propagator.class.isAssignableFrom(cause.getClass())) {
+        	var p = (Propagator)cause;
+        	p.getConstraint().incEffectiveFiltering();
+        }
         insight.modifiy(variable);
         if (!variable.isScheduled()) {
             var_queue.addLast(variable);

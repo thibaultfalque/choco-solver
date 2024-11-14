@@ -14,6 +14,7 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 import org.chocosolver.parser.ParserException;
 import org.chocosolver.solver.Model;
 import org.chocosolver.solver.Solver;
+import org.chocosolver.solver.constraints.Constraint;
 import org.chocosolver.solver.constraints.extension.Tuples;
 import org.chocosolver.solver.constraints.nary.automata.FA.FiniteAutomaton;
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression;
@@ -42,6 +43,8 @@ import org.xcsp.common.structures.Transition;
 import org.xcsp.parser.callbacks.XCallbacks2;
 import org.xcsp.parser.entries.XConstraints;
 import org.xcsp.parser.entries.XVariables;
+import org.xcsp.parser.entries.XConstraints.XBlock;
+import org.xcsp.parser.entries.XConstraints.XGroup;
 
 import java.io.File;
 import java.util.*;
@@ -1828,6 +1831,28 @@ public class XCSPParser implements XCallbacks2 {
             unimplementedCase(g);
         endGroup(g);
     }
+    
+    @Override
+    public void beginGroup(XGroup g) {
+    	Constraint.inGroup = true;
+    }
+    
+    @Override
+    public void endGroup(XGroup g) {
+    	Constraint.currentGroup++;
+    	Constraint.inGroup = false;
+    }
+    
+    @Override
+    public void beginBlock(XBlock b) {
+    	Constraint.inBlock = true;
+    }
+    @Override
+    public void endBlock(XBlock b) {
+    	Constraint.currentBlock++;
+    	Constraint.inBlock = false;
+    }
+    
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////// ANNOTATIONS /////////////////////////////////////////////////////////////

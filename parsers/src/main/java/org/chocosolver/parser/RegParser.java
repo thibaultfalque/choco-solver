@@ -214,7 +214,7 @@ public abstract class RegParser implements IParser {
     }
 
     public void createSettings() {
-        defaultSettings = Settings.prod();
+        defaultSettings = Settings.dev();
     }
 
     public final Settings getSettings() {

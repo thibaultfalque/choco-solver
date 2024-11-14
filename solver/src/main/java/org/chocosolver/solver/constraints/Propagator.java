@@ -211,6 +211,8 @@ public abstract class Propagator<V extends Variable> implements ICause, Identity
      */
     private BoolVar reifVar;
 
+	private double weight;
+
     /**
      * Creates a new propagator to filter the domains of vars.
      * <p>
@@ -605,6 +607,7 @@ public abstract class Propagator<V extends Variable> implements ICause, Identity
      * @throws org.chocosolver.solver.exception.ContradictionException expected behavior
      */
     public void fails() throws ContradictionException {
+    	constraint.incEffectiveBacktracking();
         model.getSolver().throwsException(this, null, null);
     }
 
@@ -951,4 +954,14 @@ public abstract class Propagator<V extends Variable> implements ICause, Identity
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+	public void updateWeight(double d) {
+		double prev = weight;
+		this.weight=d;
+		model.getSolver().getSearchMonitors().whenWDEGWeightChange(constraint, prev, d);
+	}
+	
+	public double getWeight() {
+		return weight;
+	}
 }
