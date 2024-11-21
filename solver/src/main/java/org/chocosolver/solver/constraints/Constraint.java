@@ -90,8 +90,8 @@ public class Constraint {
      */
     private boolean enabled = true;
     
-    public static int currentGroup = 0;
-    public static int currentBlock = 0;
+    public static int currentGroup = 1;
+    public static int currentBlock = 1;
     public static boolean inGroup = false;
     public static boolean inBlock = false;
     private int groupId;
@@ -121,8 +121,8 @@ public class Constraint {
         this.propagators = propagators;
         this.mStatus = Status.FREE;
         this.cidx = -1;
-        this.groupId = inGroup ? currentGroup : -1 ;
-        this.blockId = inBlock ? currentBlock : -1;
+        this.groupId = inGroup ? currentGroup : 0 ;
+        this.blockId = inBlock ? currentBlock : 0;
         for (Propagator<?> propagator : propagators) {
             propagator.defineIn(this);
         }
